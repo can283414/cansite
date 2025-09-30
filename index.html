@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>Animasyonlu Site</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body, html { width: 100%; height: 100%; overflow: hidden; font-family: sans-serif; }
+
+  /* Siyah ekran */
+  #loadingScreen {
+    position: fixed; top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: black;
+    color: white;
+    display: flex; justify-content: center; align-items: center;
+    font-size: 2em;
+  }
+
+  /* Üç nokta animasyonu */
+  .dots::after {
+    content: '';
+    animation: dots 1s steps(3, end) infinite;
+  }
+  @keyframes dots {
+    0%, 20% { content: ''; }
+    40% { content: '.'; }
+    60% { content: '..'; }
+    80%, 100% { content: '...'; }
+  }
+
+  /* Ana ekran */
+  #mainScreen {
+    position: fixed; top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: white;
+    display: none;
+    overflow: hidden;
+  }
+
+  /* Kalpler */
+  .heart {
+    position: absolute;
+    width: 20px; height: 20px;
+    background: red;
+    transform: rotate(-45deg);
+    animation: fall 3s linear infinite;
+  }
+  .heart::before,
+  .heart::after {
+    content: '';
+    position: absolute;
+    width: 20px; height: 20px;
+    background: red;
+    border-radius: 50%;
+  }
+  .heart::before { top: -10px; left: 0; }
+  .heart::after { top: 0; left: 10px; }
+
+  @keyframes fall {
+    0% { transform: translateY(-50px) rotate(-45deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(-45deg); opacity: 0; }
+  }
+
+  /* Ortadaki isim */
+  #name {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 3em; cursor: pointer;
+    z-index: 1000;
+  }
+
+  /* Büyük kalp */
+  #bigHeart {
+    position: absolute; top: 50%; left: 50%;
+    width: 150px; height: 150px;
+    background: red;
+    transform: translate(-50%, -50%) rotate(-45deg);
+    display: none;
+    z-index: 1000;
+  }
+  #bigHeart::before, #bigHeart::after {
+    content: '';
+    position: absolute;
+    width: 150px; height: 150px;
+    background: red;
+    border-radius: 50%;
+  }
+  #bigHeart::before { top: -75px; left: 0; }
+  #bigHeart::after { top: 0; left: 75px; }
+</style>
+</head>
+<body>
+
+<div id="loadingScreen">
+  Hazırlanıyor<span class="dots"></span>
+</div>
+
+<div id="mainScreen">
+  <div id="name">Yağmur</div>
+  <div id="bigHeart"></div>
+</div>
+
+<script>
+  const loadingScreen = document.getElementById('loadingScreen');
+  const mainScreen = document.getElementById('mainScreen');
+  const nameEl = document.getElementById('name');
+  const bigHeart = document.getElementById('bigHeart');
+
+  // 2 saniye sonra siyah ekranı gizle ve ana ekranı göster
+  setTimeout(() => {
+    loadingScreen.style.display = 'none';
+    mainScreen.style.display = 'block';
+    createHearts();
+  }, 2000);
+
+  // Küçük kalpler oluştur
+  function createHearts() {
+    for(let i = 0; i < 50; i++) {
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      heart.style.left = Math.random() * window.innerWidth + 'px';
+      heart.style.animationDuration = (Math.random() * 2 + 1) + 's';
+      heart.style.width = heart.style.height = (Math.random() * 20 + 10) + 'px';
+      mainScreen.appendChild(heart);
+    }
+  }
+
+  // İsme tıklandığında
+  nameEl.addEventListener('click', () => {
+    // Küçük kalpleri kaldır
+    document.querySelectorAll('.heart').forEach(h => h.remove());
+    // Büyük kalbi göster
+    bigHeart.style.display = 'block';
+    // 10 saniye sonra siteyi kapat
+    setTimeout(() => {
+      window.close(); // Tarayıcı izin verirse kapanacak
+    }, 10000);
+  });
+</script>
+
+</body>
+</html>
