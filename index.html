@@ -2,173 +2,192 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <title>Seni Çok Seviyorum Yağmur</title>
+  <title>İyi ki varsın!</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
   <style>
     body {
+      background: #ffe9f3;
       margin: 0;
-      padding: 0;
-      background: #ffe6f7;
       overflow: hidden;
-      height: 100vh;
-      width: 100vw;
+      min-height: 100vh;
+      font-family: 'Pacifico', cursive;
+      position: relative;
     }
-    #flowers, #hearts {
-      position: fixed;
-      top: 0; left: 0; width: 100vw; height: 100vh;
-      pointer-events: none;
-      z-index: 1;
-    }
-    #bigHeartContainer {
+    .falling {
       position: absolute;
-      left: 50%;
+      will-change: transform;
+      z-index: 1;
+      pointer-events: none;
+      user-select: none;
+    }
+    .heart-container {
+      position: absolute;
       top: 50%;
+      left: 50%;
       transform: translate(-50%, -50%);
-      z-index: 3;
-      width: 50vw;
-      height: 45vw;
-      max-width: 550px;
-      max-height: 500px;
-      min-width: 320px;
-      min-height: 280px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      z-index: 10;
       cursor: pointer;
       user-select: none;
     }
-    #bigHeartSVG {
-      width: 100%;
-      height: 100%;
-      display: block;
-      filter: drop-shadow(0 8px 24px #c9184a77);
-      transition: transform 1s cubic-bezier(.46,1.48,.52,.95);
-      will-change: transform;
+    .big-heart {
+      width: 420px;
+      height: 370px;
+      background: pink;
+      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+      box-shadow: 0 0 40px 5px #ffb6d5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 5px solid #fff;
+      position: relative;
+      transition: box-shadow 0.2s;
     }
-    #loveTextBox {
+    .big-heart:active {
+      box-shadow: 0 0 80px 20px #ff69b4;
+    }
+    .kitty-heart-img {
+      width: 120px;
+      position: absolute;
+      top: 48px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 3;
+      pointer-events: none;
+      transition: filter 0.3s;
+    }
+    .heart-text {
       display: none;
       position: absolute;
+      top: 185px;
       left: 50%;
-      top: 50%;
-      transform: translate(-50%,-50%);
-      z-index: 10;
-      padding: 42px 24px 38px 24px;
-      border-radius: 28px;
-      box-shadow: 0 8px 40px #e6394627, 0 0 0 8px #fff8;
-      min-width: 260px;
-      min-height: 120px;
-      border: 4px solid #f8bbd0;
-      background: #fff7f9;
-      overflow: hidden;
-      animation: popText 1s cubic-bezier(.13,.94,.66,1.1);
-    }
-    @keyframes popText {
-      0% { transform: translate(-50%,-50%) scale(0.7);}
-      80%{ transform: translate(-50%,-50%) scale(1.08);}
-      100%{ transform: translate(-50%,-50%) scale(1);}
-    }
-    /* Hello Kitty büyük ve opak olarak yazının arkasında */
-    #helloKittyBg {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%,-50%);
-      width: 170px;
-      height: 170px;
-      opacity: 0.93;
-      z-index: 1;
-      pointer-events: none;
-      filter: drop-shadow(0 2px 18px #fff9) drop-shadow(0 1px 12px #fff4);
-      background: none;
-    }
-    #loveText {
-      position: relative;
-      font-family: 'Comic Sans MS', cursive, sans-serif;
-      font-size: 2.2rem;
-      color: #e63946;
+      transform: translateX(-50%);
+      width: 90%;
+      font-size: 2.1rem;
+      color: #c90061;
       text-align: center;
-      letter-spacing: 1px;
-      text-shadow: 0 2px 18px #fff, 0 1px 2px #d7266022, 0 0 10px #e6394630;
-      margin-top: 18px;
-      z-index: 2;
+      text-shadow: 1px 1px 5px #fff, 2px 2px 8px #ffb6d5;
+      z-index: 4;
+      line-height: 1.4;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.7s;
+      font-family: 'Pacifico', cursive;
     }
-    @media (max-width: 700px) {
-      #bigHeartContainer {
+    .heart-text.show {
+      display: block;
+      opacity: 1;
+    }
+    @media (max-width: 600px) {
+      .big-heart {
         width: 90vw;
-        height: 80vw;
-        max-width: none;
-        max-height: none;
+        height: 65vw;
+        min-width: 230px;
+        min-height: 200px;
       }
-      #loveTextBox {
-        padding: 18px 8px 18px 8px;
-        min-width: 140px; min-height: 70px;
+      .kitty-heart-img {
+        width: 60px;
+        top: 25px;
       }
-      #loveText { font-size: 1.3rem;}
-      #helloKittyBg { width: 95px; height: 95px;}
+      .heart-text {
+        font-size: 1.1rem;
+        top: 90px;
+      }
     }
   </style>
 </head>
 <body>
-  <div id="flowers"></div>
-  <div id="hearts"></div>
-  <div id="bigHeartContainer" title="Kalbe tıkla!">
-    <svg id="bigHeartSVG" viewBox="0 0 512 480">
-      <path d="M256,440
-        C50,280 0,140 130,85
-        C190,60 256,110 256,150
-        C256,110 322,60 382,85
-        C512,140 462,280 256,440
-        Z"
-        fill="#e63946" stroke="#c9184a" stroke-width="8" />
-    </svg>
+  <!-- Kalp ve içerik -->
+  <div class="heart-container" id="heartContainer">
+    <div class="big-heart">
+      <img class="kitty-heart-img" src="https://pngimg.com/d/hello_kitty_PNG34.png" alt="Hello Kitty">
+      <div class="heart-text" id="heartText">
+        İyi ki varsın<br>
+        Seni çok seviyorum
+      </div>
+    </div>
   </div>
-  <div id="loveTextBox">
-    <img id="helloKittyBg" src="https://pngimg.com/d/hello_kitty_PNG46.png" alt="Hello Kitty">
-    <div id="loveText">Seni çok seviyorum Yağmur</div>
-  </div>
+  <!-- JS ile çokça Hello Kitty ve çiçek ekleme ve animasyon -->
   <script>
-    // Çiçek yağmuru (sürekli)
-    const flowerTypes = ["🌸", "🌹", "🌻", "🌷", "💐"];
-    function createFlower() {
-      const flower = document.createElement('span');
-      flower.textContent = flowerTypes[Math.floor(Math.random() * flowerTypes.length)];
-      flower.style.position = 'absolute';
-      flower.style.left = Math.random() * 98 + 'vw';
-      flower.style.top = '-40px';
-      flower.style.fontSize = (28 + Math.random() * 36) + 'px';
-      flower.style.transition = `top ${(2.5 + Math.random() * 2.5)}s linear`;
-      flower.style.opacity = 0.7 + Math.random() * 0.3;
-      document.getElementById('flowers').appendChild(flower);
-      setTimeout(() => { flower.style.top = '100vh'; }, 10);
-      setTimeout(() => flower.remove(), 5200);
-    }
-    setInterval(createFlower, 160);
+    // Farklı Hello Kitty ve kedi benzeri görseller
+    const catImgs = [
+      "https://pngimg.com/d/hello_kitty_PNG34.png", // Hello Kitty
+      "https://pngimg.com/d/hello_kitty_PNG13.png", // Farklı Hello Kitty
+      "https://pngimg.com/d/hello_kitty_PNG26.png", // Farklı Hello Kitty
+      "https://pngimg.com/d/cat_PNG50447.png",      // Sevimli kedi
+      "https://pngimg.com/d/cat_PNG50510.png"       // Sevimli kedi
+    ];
+    // Çiçek görselleri
+    const flowerImgs = [
+      "https://cdn.pixabay.com/photo/2013/07/12/13/21/flower-146971_1280.png",
+      "https://cdn.pixabay.com/photo/2016/03/31/20/10/flower-1293285_1280.png",
+      "https://cdn.pixabay.com/photo/2014/12/21/23/50/flower-579251_1280.png",
+      "https://cdn.pixabay.com/photo/2013/07/13/13/41/rose-161356_1280.png"
+    ];
+    const totalKitties = 24, totalFlowers = 36;
+    const fallings = [];
 
-    // Alttan küçük kalpler yukarı çıkar (ilk açılışta birkaç saniye)
-    function createMiniHeart() {
-      const heart = document.createElement('span');
-      heart.textContent = '❤️';
-      heart.style.position = 'absolute';
-      heart.style.left = (5 + Math.random() * 90) + 'vw';
-      heart.style.top = '100vh';
-      heart.style.fontSize = (18 + Math.random() * 18) + 'px';
-      heart.style.transition = `top ${(2.2 + Math.random() * 2.2)}s cubic-bezier(.65,1.5,.5,1.2)`;
-      heart.style.opacity = 0.7 + Math.random() * 0.3;
-      document.getElementById('hearts').appendChild(heart);
-      setTimeout(() => { heart.style.top = (60 + Math.random() * 18) + 'vh'; }, 100);
-      setTimeout(() => heart.remove(), 4400);
-    }
-    let heartInterval = setInterval(createMiniHeart, 120);
-    setTimeout(() => { clearInterval(heartInterval); }, 4000);
+    // Ekranda hareket eden Hello Kitty ve çiçekleri oluştur
+    function createFalling(src, size) {
+      const img = document.createElement('img');
+      img.src = src;
+      img.className = "falling";
+      img.style.width = size + "px";
+      img.style.left = Math.random()*100 + "vw";
+      img.style.top = (Math.random()*-20) + "vh";
+      document.body.appendChild(img);
 
-    // Kalbe tıklanınca yazı ve Hello Kitty teması gelsin
-    const bigHeartContainer = document.getElementById('bigHeartContainer');
-    bigHeartContainer.addEventListener('click', function () {
-      document.getElementById('loveTextBox').style.display = 'block';
-      // Kalp hafif büyüsün
-      document.getElementById('bigHeartSVG').style.transform = 'scale(1.07)';
-      setTimeout(() => {
-        document.getElementById('bigHeartSVG').style.transform = 'scale(1)';
-      }, 900);
+      // Her birinin farklı hız ve yön parametreleri olsun
+      return {
+        node: img,
+        x: Math.random()*window.innerWidth,
+        y: Math.random()*-150,
+        speed: 0.7 + Math.random()*2.3,
+        drift: (Math.random()-0.5)*0.8,
+        size: size,
+        rotate: Math.random()*360,
+        rotateSpeed: (Math.random()-0.5)*0.5
+      }
+    }
+
+    for(let i=0; i<totalKitties; i++) {
+      const size = 42 + Math.random()*38;
+      const img = catImgs[Math.floor(Math.random()*catImgs.length)];
+      fallings.push(createFalling(img, size));
+    }
+    for(let i=0; i<totalFlowers; i++) {
+      const size = 32 + Math.random()*28;
+      const img = flowerImgs[Math.floor(Math.random()*flowerImgs.length)];
+      fallings.push(createFalling(img, size));
+    }
+
+    function animateFallings() {
+      for(const f of fallings) {
+        f.y += f.speed;
+        f.x += f.drift;
+        f.rotate += f.rotateSpeed;
+        if(f.y > window.innerHeight + 40) {
+          f.y = Math.random()*-100;
+          f.x = Math.random()*window.innerWidth;
+        }
+        if(f.x < -50) f.x = window.innerWidth + 10;
+        if(f.x > window.innerWidth + 10) f.x = -50;
+        f.node.style.transform = `translate(${f.x}px, ${f.y}px) rotate(${f.rotate}deg)`;
+      }
+      requestAnimationFrame(animateFallings);
+    }
+    animateFallings();
+
+    // Kalbe tıklama ile yazıyı göster/gizle
+    const heartContainer = document.getElementById('heartContainer');
+    const heartText = document.getElementById('heartText');
+    let shown = false;
+    heartContainer.addEventListener('click', function() {
+      shown = !shown;
+      if(shown) {
+        heartText.classList.add('show');
+      } else {
+        heartText.classList.remove('show');
+      }
     });
   </script>
 </body>
