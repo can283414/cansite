@@ -1,143 +1,175 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
-<title>Animasyonlu Site</title>
-<style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body, html { width: 100%; height: 100%; overflow: hidden; font-family: sans-serif; }
-
-  /* Siyah ekran */
-  #loadingScreen {
-    position: fixed; top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: black;
-    color: white;
-    display: flex; justify-content: center; align-items: center;
-    font-size: 2em;
-  }
-
-  /* Üç nokta animasyonu */
-  .dots::after {
-    content: '';
-    animation: dots 1s steps(3, end) infinite;
-  }
-  @keyframes dots {
-    0%, 20% { content: ''; }
-    40% { content: '.'; }
-    60% { content: '..'; }
-    80%, 100% { content: '...'; }
-  }
-
-  /* Ana ekran */
-  #mainScreen {
-    position: fixed; top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: white;
-    display: none;
-    overflow: hidden;
-  }
-
-  /* Kalpler */
-  .heart {
-    position: absolute;
-    width: 20px; height: 20px;
-    background: red;
-    transform: rotate(-45deg);
-    animation: fall 3s linear infinite;
-  }
-  .heart::before,
-  .heart::after {
-    content: '';
-    position: absolute;
-    width: 20px; height: 20px;
-    background: red;
-    border-radius: 50%;
-  }
-  .heart::before { top: -10px; left: 0; }
-  .heart::after { top: 0; left: 10px; }
-
-  @keyframes fall {
-    0% { transform: translateY(-50px) rotate(-45deg); opacity: 1; }
-    100% { transform: translateY(100vh) rotate(-45deg); opacity: 0; }
-  }
-
-  /* Ortadaki isim */
-  #name {
-    position: absolute; top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 3em; cursor: pointer;
-    z-index: 1000;
-  }
-
-  /* Büyük kalp */
-  #bigHeart {
-    position: absolute; top: 50%; left: 50%;
-    width: 150px; height: 150px;
-    background: red;
-    transform: translate(-50%, -50%) rotate(-45deg);
-    display: none;
-    z-index: 1000;
-  }
-  #bigHeart::before, #bigHeart::after {
-    content: '';
-    position: absolute;
-    width: 150px; height: 150px;
-    background: red;
-    border-radius: 50%;
-  }
-  #bigHeart::before { top: -75px; left: 0; }
-  #bigHeart::after { top: 0; left: 75px; }
-</style>
+  <meta charset="UTF-8">
+  <title>Seni Çok Seviyorum Yağmur</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #ffe6f7;
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+    }
+    #flowers, #hearts {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      pointer-events: none;
+      z-index: 1;
+    }
+    #bigHeartContainer {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 3;
+      width: 50vw;
+      height: 45vw;
+      max-width: 550px;
+      max-height: 500px;
+      min-width: 320px;
+      min-height: 280px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+    }
+    #bigHeartSVG {
+      width: 100%;
+      height: 100%;
+      display: block;
+      filter: drop-shadow(0 8px 24px #c9184a77);
+      transition: transform 1s cubic-bezier(.46,1.48,.52,.95);
+      will-change: transform;
+    }
+    #loveTextBox {
+      display: none;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%,-50%);
+      z-index: 10;
+      padding: 42px 24px 38px 24px;
+      border-radius: 28px;
+      box-shadow: 0 8px 40px #e6394627, 0 0 0 8px #fff8;
+      min-width: 260px;
+      min-height: 120px;
+      border: 4px solid #f8bbd0;
+      background: #fff7f9;
+      overflow: hidden;
+      animation: popText 1s cubic-bezier(.13,.94,.66,1.1);
+    }
+    @keyframes popText {
+      0% { transform: translate(-50%,-50%) scale(0.7);}
+      80%{ transform: translate(-50%,-50%) scale(1.08);}
+      100%{ transform: translate(-50%,-50%) scale(1);}
+    }
+    /* Hello Kitty büyük ve opak olarak yazının arkasında */
+    #helloKittyBg {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%,-50%);
+      width: 170px;
+      height: 170px;
+      opacity: 0.93;
+      z-index: 1;
+      pointer-events: none;
+      filter: drop-shadow(0 2px 18px #fff9) drop-shadow(0 1px 12px #fff4);
+      background: none;
+    }
+    #loveText {
+      position: relative;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      font-size: 2.2rem;
+      color: #e63946;
+      text-align: center;
+      letter-spacing: 1px;
+      text-shadow: 0 2px 18px #fff, 0 1px 2px #d7266022, 0 0 10px #e6394630;
+      margin-top: 18px;
+      z-index: 2;
+    }
+    @media (max-width: 700px) {
+      #bigHeartContainer {
+        width: 90vw;
+        height: 80vw;
+        max-width: none;
+        max-height: none;
+      }
+      #loveTextBox {
+        padding: 18px 8px 18px 8px;
+        min-width: 140px; min-height: 70px;
+      }
+      #loveText { font-size: 1.3rem;}
+      #helloKittyBg { width: 95px; height: 95px;}
+    }
+  </style>
 </head>
 <body>
-
-<div id="loadingScreen">
-  Hazırlanıyor<span class="dots"></span>
-</div>
-
-<div id="mainScreen">
-  <div id="name">Yağmur</div>
-  <div id="bigHeart"></div>
-</div>
-
-<script>
-  const loadingScreen = document.getElementById('loadingScreen');
-  const mainScreen = document.getElementById('mainScreen');
-  const nameEl = document.getElementById('name');
-  const bigHeart = document.getElementById('bigHeart');
-
-  // 2 saniye sonra siyah ekranı gizle ve ana ekranı göster
-  setTimeout(() => {
-    loadingScreen.style.display = 'none';
-    mainScreen.style.display = 'block';
-    createHearts();
-  }, 2000);
-
-  // Küçük kalpler oluştur
-  function createHearts() {
-    for(let i = 0; i < 50; i++) {
-      const heart = document.createElement('div');
-      heart.className = 'heart';
-      heart.style.left = Math.random() * window.innerWidth + 'px';
-      heart.style.animationDuration = (Math.random() * 2 + 1) + 's';
-      heart.style.width = heart.style.height = (Math.random() * 20 + 10) + 'px';
-      mainScreen.appendChild(heart);
+  <div id="flowers"></div>
+  <div id="hearts"></div>
+  <div id="bigHeartContainer" title="Kalbe tıkla!">
+    <svg id="bigHeartSVG" viewBox="0 0 512 480">
+      <path d="M256,440
+        C50,280 0,140 130,85
+        C190,60 256,110 256,150
+        C256,110 322,60 382,85
+        C512,140 462,280 256,440
+        Z"
+        fill="#e63946" stroke="#c9184a" stroke-width="8" />
+    </svg>
+  </div>
+  <div id="loveTextBox">
+    <img id="helloKittyBg" src="https://pngimg.com/d/hello_kitty_PNG46.png" alt="Hello Kitty">
+    <div id="loveText">Seni çok seviyorum Yağmur</div>
+  </div>
+  <script>
+    // Çiçek yağmuru (sürekli)
+    const flowerTypes = ["🌸", "🌹", "🌻", "🌷", "💐"];
+    function createFlower() {
+      const flower = document.createElement('span');
+      flower.textContent = flowerTypes[Math.floor(Math.random() * flowerTypes.length)];
+      flower.style.position = 'absolute';
+      flower.style.left = Math.random() * 98 + 'vw';
+      flower.style.top = '-40px';
+      flower.style.fontSize = (28 + Math.random() * 36) + 'px';
+      flower.style.transition = `top ${(2.5 + Math.random() * 2.5)}s linear`;
+      flower.style.opacity = 0.7 + Math.random() * 0.3;
+      document.getElementById('flowers').appendChild(flower);
+      setTimeout(() => { flower.style.top = '100vh'; }, 10);
+      setTimeout(() => flower.remove(), 5200);
     }
-  }
+    setInterval(createFlower, 160);
 
-  // İsme tıklandığında
-  nameEl.addEventListener('click', () => {
-    // Küçük kalpleri kaldır
-    document.querySelectorAll('.heart').forEach(h => h.remove());
-    // Büyük kalbi göster
-    bigHeart.style.display = 'block';
-    // 10 saniye sonra siteyi kapat
-    setTimeout(() => {
-      window.close(); // Tarayıcı izin verirse kapanacak
-    }, 10000);
-  });
-</script>
+    // Alttan küçük kalpler yukarı çıkar (ilk açılışta birkaç saniye)
+    function createMiniHeart() {
+      const heart = document.createElement('span');
+      heart.textContent = '❤️';
+      heart.style.position = 'absolute';
+      heart.style.left = (5 + Math.random() * 90) + 'vw';
+      heart.style.top = '100vh';
+      heart.style.fontSize = (18 + Math.random() * 18) + 'px';
+      heart.style.transition = `top ${(2.2 + Math.random() * 2.2)}s cubic-bezier(.65,1.5,.5,1.2)`;
+      heart.style.opacity = 0.7 + Math.random() * 0.3;
+      document.getElementById('hearts').appendChild(heart);
+      setTimeout(() => { heart.style.top = (60 + Math.random() * 18) + 'vh'; }, 100);
+      setTimeout(() => heart.remove(), 4400);
+    }
+    let heartInterval = setInterval(createMiniHeart, 120);
+    setTimeout(() => { clearInterval(heartInterval); }, 4000);
 
+    // Kalbe tıklanınca yazı ve Hello Kitty teması gelsin
+    const bigHeartContainer = document.getElementById('bigHeartContainer');
+    bigHeartContainer.addEventListener('click', function () {
+      document.getElementById('loveTextBox').style.display = 'block';
+      // Kalp hafif büyüsün
+      document.getElementById('bigHeartSVG').style.transform = 'scale(1.07)';
+      setTimeout(() => {
+        document.getElementById('bigHeartSVG').style.transform = 'scale(1)';
+      }, 900);
+    });
+  </script>
 </body>
 </html>
